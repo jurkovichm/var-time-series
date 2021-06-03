@@ -7,6 +7,8 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
 ```
 
 ### Introduction
@@ -24,3 +26,25 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Bibliography
 
 ### Code Appendix
+
+```{r}
+btc<-read_csv('BTC-USD.csv')
+eth<-read_csv('ETH-USD.csv')
+doge<-read_csv('DOGE-USD.csv')
+eth <- eth[-1827,]
+
+closing_prices <- as.data.frame(cbind(btc$Close, eth$Close, doge$Close))
+
+closing_prices$Date <- btc$Date
+
+colnames(closing_prices) <- c('BTC', 'ETH', 'DOGE', 'Date')
+
+plot(closing_prices$Date, closing_prices$BTC, type = 'l')
+lines(closing_prices$Date, closing_prices$ETH, type = 'l', col = 'red')
+lines(closing_prices$Date, closing_prices$DOGE, type = 'l', col = 'dark green')
+
+#plot with standardized data?
+
+
+
+```
