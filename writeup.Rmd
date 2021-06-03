@@ -13,6 +13,10 @@ library(tidyverse)
 
 ### Introduction
 
+- Motivated by the goal of predicting a time series via a correlated partner time series, we will investigate Vector Autoregressive models (AKA VAR(p) models). 
+
+- Why VAR models exist, what they're better at than AR models. In predictions they don't just include a variable at time t, but take all previous observations into account.
+
 ### Model
 
 ### Estimation
