@@ -9,6 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(vars)
+library(lmtest)
 ```
 
 ### Introduction
@@ -104,6 +105,15 @@ forecast(var12) %>%
 t <- as.data.frame(forecast(var12))
 
 t$`Point Forecast` * attr(t$`Point Forecast`, 'scaled:scale') + attr(t$`Point Forecast`, 'scaled:center')
+
+#granger test for causality
+
+grangertest(BTC ~ DOGE, data = og_data_clean)
+
+grangertest(BTC ~ ETH, data = og_data_clean)
+
+grangertest(DOGE ~ BTC, order = 50,data = og_data_clean)
+
 
 
 ```
