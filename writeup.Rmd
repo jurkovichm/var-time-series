@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(vars)
 library(lmtest)
+library(forecast)
 ```
 
 ### Introduction
@@ -98,7 +99,6 @@ ts_obj <- as.ts(scaled_data_clean)
 var12 <- VAR(ts_obj, p=12, type="const")
 serial.test(var12, lags.pt=12, type="PT.asymptotic")
 
-library(forecast)
 forecast(var12) %>%
   autoplot() + xlab("Year")
 
@@ -113,7 +113,4 @@ grangertest(BTC ~ DOGE, data = og_data_clean)
 grangertest(BTC ~ ETH, data = og_data_clean)
 
 grangertest(DOGE ~ BTC, order = 50,data = og_data_clean)
-
-
-
 ```
