@@ -15,6 +15,7 @@ library(forecast)
 
 ### Introduction
 
+(matt)
 - Motivated by the goal of predicting a time series via a correlated partner time series, we will investigate Vector Autoregressive models (AKA VAR(p) models). 
 
 - Why VAR models exist, what they're better at than AR models. In predictions they don't just include a variable at time t, but take all previous observations into account.
@@ -34,10 +35,14 @@ $$x_{t,1} = \alpha_1 + \beta_{3,1}x_{t-1,1} +\beta_{3,2}x_{t-1,2} + \beta_{3,3}x
 "adding variables to the VAR creates complications, because the number of VAR parameters increases as the square of the number of variables: a nine-variable, four-lag VAR has 333 unknown coefficients" https://pubs.aeaweb.org/doi/pdf/10.1257/jep.15.4.101
 
 ### Diagnostics
+(matt)
 
 ### Forecasting
 
 ### Data Example
+(matt)
+
+### Discussion
 
 ### Bibliography
 
@@ -95,8 +100,9 @@ summary(fitvar)
 
 acf(residuals(fitvar))
 
+VAR
 
-VARselect(scaled_data_clean, lag.max=12, type="const")[["selection"]]
+VARselect(scaled_data_clean, lag.max=500, type="const")[["selection"]]
 ts_obj <- as.ts(scaled_data_clean)
 
 var12 <- VAR(ts_obj, p=12, type="const")
