@@ -8,7 +8,7 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-
+library(vars)
 ```
 
 ### Introduction
@@ -49,6 +49,50 @@ lines(closing_prices$Date, closing_prices$DOGE, type = 'l', col = 'dark green')
 
 #plot with standardized data?
 
+btc_scale <- scale(closing_prices$BTC)
+doge_scale <- scale(closing_prices$DOGE)
+eth_scale <- scale(closing_prices$ETH)
+
+scaled_data <- data.frame(Date = closing_prices$Date,
+                          scaled_bth = btc_scale[,1],
+           scaled_eth = eth_scale[,1],
+           scaled_doge = doge_scale[,1])
+
+plot(scaled_data$Date, scaled_data$scaled_bth, type = 'l')
+lines(scaled_data$Date, scaled_data$scaled_eth, type = 'l', col = 'red')
+lines(scaled_data$Date, scaled_data$scaled_doge, type = 'l', col = 'dark green')
+
+#try to make the plots kinda stationary maybe?
+plot(scaled_data$Date[c(-1,-2)], diff(scaled_data$scaled_bth, 2), type = 'l')
+lines(scaled_data$Date[c(-1,-2)], diff(scaled_data$scaled_eth, 2), type = 'l', col = 'red')
+lines(scaled_data$Date[c(-1,-2)], diff(scaled_data$scaled_doge, 2), type = 'l', col = 'dark green')
+#eh decent I guess
+
+scaled_data <- scaled_data[,-1]
+
+scaled_data_clean <- na.omit(scaled_data)
+
+
+fitvar = VAR(scaled_data_clean, p=2, type="both")
+
+summary(fitvar)
+
+acf(residuals(fitvar))
+
+
+VARselect(scaled_data_clean, lag.max=12, type="const")[["selection"]]
+ts_obj <- as.ts(scaled_data_clean)
+
+var12 <- VAR(ts_obj, p=12, type="const")
+serial.test(var12, lags.pt=12, type="PT.asymptotic")
+
+library(forecast)
+forecast(var12) %>%
+  autoplot() + xlab("Year")
+
+t <- as.data.frame(forecast(var12))
+
+t$`Point Forecast` * attr(t$`Point Forecast`, 'scaled:scale') + attr(t$`Point Forecast`, 'scaled:center')
 
 
 ```
