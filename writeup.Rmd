@@ -58,7 +58,7 @@ lines(closing_prices$Date, closing_prices$ETH, type = 'l', col = 'red')
 lines(closing_prices$Date, closing_prices$DOGE, type = 'l', col = 'dark green')
 
 #plot with standardized data?
-<<<<<<< HEAD
+
 
 btc_scale <- scale(closing_prices$BTC)
 doge_scale <- scale(closing_prices$DOGE)
@@ -106,6 +106,4 @@ t <- as.data.frame(forecast(var12))
 t$`Point Forecast` * attr(t$`Point Forecast`, 'scaled:scale') + attr(t$`Point Forecast`, 'scaled:center')
 
 
-=======
->>>>>>> 86563cf887b86fdfc05bd66fb4752ad0c23275bc
 ```
