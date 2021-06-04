@@ -85,6 +85,9 @@ scaled_data <- scaled_data[,-1]
 
 scaled_data_clean <- na.omit(scaled_data)
 
+og_data_clean <- na.omit(closing_prices)
+og_data_clean <- og_data_clean[,4]
+
 
 fitvar = VAR(scaled_data_clean, p=2, type="both")
 
