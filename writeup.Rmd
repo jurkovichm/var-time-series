@@ -11,6 +11,19 @@ library(tidyverse)
 library(vars)
 library(lmtest)
 library(forecast)
+
+
+# na 'resolver'. turns na's into previous day's close value
+
+na2lag1 <- function(x) {
+  i <- 1
+  while (i <= length(x)) {
+    if (is.na(x[i])) {
+      x[i] <- x[i - 1]
+    }
+    i <- i + 1
+  }
+}
 ```
 
 ### Introduction
@@ -124,34 +137,44 @@ lines(sl_data$Date, sl_data$sl_doge, type = "l", col = "dark green")
 
 
 ```{r}
-# differenced scaled (unlogged) data
+# differenced scaled (unlogged) data plot
 plot(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_bth, 2), type = "l")
 lines(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_eth, 2), type = "l", col = "red")
 lines(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_doge, 2), type = "l", col = "dark green")
 ```
 
+```{r}
+# varselect for scaled & logged data
+
+slvar <- VARselect(na.omit(sl_data[,-1]), lag.max = 100, type = "both")
+slvar$selection
+plot(slvar$criteria[1,], type = 'l')
+lines(slvar$criteria[2,], type = 'l', col = "red")
+```
+
+
 
 ```{r}
 # prepping data for vars package
-scaled_data <- scaled_data[, -1]
-scaled_data_clean <- na.omit(scaled_data)
+scaled_data_clean <- scaled_data[, -1] %>% na.omit()
 og_data_clean <- na.omit(closing_prices)
 og_data_clean <- og_data_clean[, 4]
 
-
+# fitting var model
 fitvar <- VAR(scaled_data_clean, p = 2, type = "both")
 
 summary(fitvar)
-
 acf(residuals(fitvar))
 
-VAR
-
+# VARselect test
 VARselect(scaled_data_clean, lag.max = 100, type = "both")[["selection"]]
-ts_obj <- as.ts(scaled_data_clean)
 
+# UNSURE; TO BE LABELED
+ts_obj <- as.ts(scaled_data_clean)
 var12 <- VAR(ts_obj, p = 12, type = "const")
 serial.test(var12, lags.pt = 12, type = "PT.asymptotic")
+
+# forecasts
 
 forecast(var12) %>%
   autoplot() + xlab("Year")
@@ -160,24 +183,11 @@ t <- as.data.frame(forecast(var12))
 
 t$`Point Forecast` * attr(t$`Point Forecast`, "scaled:scale") + attr(t$`Point Forecast`, "scaled:center")
 
-# granger test for causality
+# granger test for causality COMMENTED OUT RN
 
-grangertest(BTC ~ DOGE, data = og_data_clean)
+  #grangertest(BTC ~ DOGE, data = og_data_clean)
 
-grangertest(BTC ~ ETH, data = og_data_clean)
+  #grangertest(BTC ~ ETH, data = og_data_clean)
 
-grangertest(DOGE ~ BTC, order = 50, data = og_data_clean)
-```
-
-
-```{r}
-na2lag1 <- function(x) {
-  i <- 1
-  while (i <= length(x)) {
-    if (is.na(x[i])) {
-      x[i] <- x[i - 1]
-    }
-    i <- i + 1
-  }
-}
+  #rangertest(DOGE ~ BTC, order = 50, data = og_data_clean)
 ```
