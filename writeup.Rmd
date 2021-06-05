@@ -181,9 +181,11 @@ forecast(var12) %>%
 
 # granger test for causality COMMENTED OUT RN
 
-  #grangertest(BTC ~ DOGE, data = og_data_clean)
+grangertest(sl_btc ~ sl_doge, data = sl_data, order = 2)
 
-  #grangertest(BTC ~ ETH, data = og_data_clean)
+grang
+
+grangertest(BTC ~ ETH, data = og_data_clean)
 
   #rangertest(DOGE ~ BTC, order = 50, data = og_data_clean)
 ```
@@ -209,7 +211,7 @@ summary(fitvar_p1)
 # Asymptotic Portmanteau test
 
 # we fail to find evidence of autocorrelation in the residuals of the VAR(9) model at the default of 16 lags, but if we do 40 we find significant evidence of autocorrealtion, might be a problem??
-serial.test(fitvar_p9, lags.pt = 40)
+serial.test(fitvar_p9, lags.pt = 50)
 
 # we find evidence of autocorrelation in the residuals of the VAR(1) model
 serial.test(fitvar_p1, lags.pt = 40)
@@ -227,7 +229,7 @@ serial.test(fitvar_p1,lags.bg = 40, type = 'BG')
 stablity_test_p9 <-stability(fitvar_p9, type = c("OLS-CUSUM"))
 stablity_test_p1 <-stability(fitvar_p1, type = c("OLS-CUSUM"))
 
-plot(stability_test_p9)
+plot(stablity_test_p9)
 plot(stablity_test_p1)
 
 
@@ -248,21 +250,21 @@ arch.test(fitvar_p1)
 
 #making some forecasts
 
-#need to refit model using slightly differntly formatted data 
+#need to refit model using slightly differently formatted data 
 sl_data_as_ts <- as.ts(sl_data[,-1])
 fitvar_p9 <- VAR(sl_data_as_ts, p = 9, type = "both")
 
-forecast(fitvar_p9, h = 20) %>%
+forecast(fitvar_p9, h = 365) %>%
   autoplot() + xlab("Year")
 
 fitvar_p1 <- VAR(sl_data_as_ts, p = 1, type = "both")
 
-forecast(fitvar_p1, h = 20) %>%
+forecast(fitvar_p1, h = 365) %>%
   autoplot() + xlab("Year")
 
+#irf stuff
 
-
-
+plot(irf(fitvar_p9))
 
 ```
 
