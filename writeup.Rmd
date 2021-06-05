@@ -23,6 +23,7 @@ na2lag1 <- function(x) {
     }
     i <- i + 1
   }
+  return(x)
 }
 ```
 
@@ -166,9 +167,6 @@ fitvar <- VAR(scaled_data_clean, p = 2, type = "both")
 summary(fitvar)
 acf(residuals(fitvar))
 
-# VARselect test
-VARselect(scaled_data_clean, lag.max = 100, type = "both")[["selection"]]
-
 # UNSURE; TO BE LABELED
 ts_obj <- as.ts(scaled_data_clean)
 var12 <- VAR(ts_obj, p = 12, type = "const")
@@ -179,9 +177,7 @@ serial.test(var12, lags.pt = 12, type = "PT.asymptotic")
 forecast(var12) %>%
   autoplot() + xlab("Year")
 
-t <- as.data.frame(forecast(var12))
-
-t$`Point Forecast` * attr(t$`Point Forecast`, "scaled:scale") + attr(t$`Point Forecast`, "scaled:center")
+# should we do an ADF test?? 
 
 # granger test for causality COMMENTED OUT RN
 
@@ -191,3 +187,83 @@ t$`Point Forecast` * attr(t$`Point Forecast`, "scaled:scale") + attr(t$`Point Fo
 
   #rangertest(DOGE ~ BTC, order = 50, data = og_data_clean)
 ```
+
+
+```{r}
+
+# removing NAs 
+sl_data$sl_btc<-na2lag1(sl_data$sl_btc)
+sl_data$sl_doge<-na2lag1(sl_data$sl_doge)
+sl_data$sl_eth<-na2lag1(sl_data$sl_eth)
+
+
+# using results of VARselect to fit two models than compare them
+fitvar_p9 <- VAR(sl_data[,-1], p = 9, type = "both")
+fitvar_p1 <- VAR(sl_data[,-1], p = 1, type = "both")
+
+summary(fitvar_p9)
+summary(fitvar_p1)
+
+# diagnostic tests 
+
+# Asymptotic Portmanteau test
+
+# we fail to find evidence of autocorrelation in the residuals of the VAR(9) model at the default of 16 lags, but if we do 40 we find significant evidence of autocorrealtion, might be a problem??
+serial.test(fitvar_p9, lags.pt = 40)
+
+# we find evidence of autocorrelation in the residuals of the VAR(1) model
+serial.test(fitvar_p1, lags.pt = 40)
+
+
+# Breusch-Godfrey test
+
+# same reversial present for the BG test...
+serial.test(fitvar_p9,lags.bg = 40, type = 'BG')
+
+
+serial.test(fitvar_p1,lags.bg = 40, type = 'BG')
+
+# more diagnostics 
+stablity_test_p9 <-stability(fitvar_p9, type = c("OLS-CUSUM"))
+stablity_test_p1 <-stability(fitvar_p1, type = c("OLS-CUSUM"))
+
+plot(stability_test_p9)
+plot(stablity_test_p1)
+
+
+# Jarque–Bera test is a goodness-of-fit test of whether sample data have the skewness and kurtosis matching a normal distribution
+p9_normal <- normality.test(fitvar_p9)
+
+plot(p9_normal)
+
+
+p1_normal <- normality.test(fitvar_p1)
+
+plot(p1_normal)
+
+# Portmanteau Q and test for the null hypothesis that the residuals of a ARIMA model are homoscedastic
+arch.test(fitvar_p9)
+arch.test(fitvar_p1)
+
+
+#making some forecasts
+
+#need to refit model using slightly differntly formatted data 
+sl_data_as_ts <- as.ts(sl_data[,-1])
+fitvar_p9 <- VAR(sl_data_as_ts, p = 9, type = "both")
+
+forecast(fitvar_p9, h = 20) %>%
+  autoplot() + xlab("Year")
+
+fitvar_p1 <- VAR(sl_data_as_ts, p = 1, type = "both")
+
+forecast(fitvar_p1, h = 20) %>%
+  autoplot() + xlab("Year")
+
+
+
+
+
+```
+
+
