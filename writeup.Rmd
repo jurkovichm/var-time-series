@@ -260,10 +260,9 @@ fitvar_p1 <- VAR(sl_data_as_ts, p = 1, type = "both")
 forecast(fitvar_p1, h = 20) %>%
   autoplot() + xlab("Year")
 
+# augmented dickey-fuller test unit root test
 
-
-
-
+ur.df(sl_data$sl_btc %>% na.omit(), lags = 2) %>% summary()
 ```
 
 
