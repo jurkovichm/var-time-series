@@ -62,52 +62,84 @@ $$x_{t,1} = \alpha_1 + \beta_{3,1}x_{t-1,1} +\beta_{3,2}x_{t-1,2} + \beta_{3,3}x
 ### Code Appendix
 
 ```{r}
-btc<-read_csv('BTC-USD.csv')
-eth<-read_csv('ETH-USD.csv')
-doge<-read_csv('DOGE-USD.csv')
-eth <- eth[-1827,]
+# reading in data
+
+btc <- read_csv("BTC-USD.csv")
+eth <- read_csv("ETH-USD.csv")
+doge <- read_csv("DOGE-USD.csv")
+eth <- eth[-1827, ] # matching length
+```
+
+
+```{r}
+# creating closing price dataframe
 
 closing_prices <- as.data.frame(cbind(btc$Close, eth$Close, doge$Close))
 
 closing_prices$Date <- btc$Date
 
-colnames(closing_prices) <- c('BTC', 'ETH', 'DOGE', 'Date')
+colnames(closing_prices) <- c("BTC", "ETH", "DOGE", "Date")
 
-plot(closing_prices$Date, closing_prices$BTC, type = 'l')
-lines(closing_prices$Date, closing_prices$ETH, type = 'l', col = 'red')
-lines(closing_prices$Date, closing_prices$DOGE, type = 'l', col = 'dark green')
+plot(closing_prices$Date, closing_prices$BTC, type = "l")
+lines(closing_prices$Date, closing_prices$ETH, type = "l", col = "red")
+lines(closing_prices$Date, closing_prices$DOGE, type = "l", col = "dark green")
+```
 
-#plot with standardized data?
 
+```{r}
+# creating scaled data dataframe
 
 btc_scale <- scale(closing_prices$BTC)
 doge_scale <- scale(closing_prices$DOGE)
 eth_scale <- scale(closing_prices$ETH)
 
-scaled_data <- data.frame(Date = closing_prices$Date,
-                          scaled_bth = btc_scale[,1],
-           scaled_eth = eth_scale[,1],
-           scaled_doge = doge_scale[,1])
+scaled_data <- data.frame(
+  Date = closing_prices$Date,
+  scaled_bth = btc_scale[, 1],
+  scaled_eth = eth_scale[, 1],
+  scaled_doge = doge_scale[, 1]
+)
 
-plot(scaled_data$Date, scaled_data$scaled_bth, type = 'l')
-lines(scaled_data$Date, scaled_data$scaled_eth, type = 'l', col = 'red')
-lines(scaled_data$Date, scaled_data$scaled_doge, type = 'l', col = 'dark green')
+plot(scaled_data$Date, scaled_data$scaled_bth, type = "l")
+lines(scaled_data$Date, scaled_data$scaled_eth, type = "l", col = "red")
+lines(scaled_data$Date, scaled_data$scaled_doge, type = "l", col = "dark green")
+```
 
-#try to make the plots kinda stationary maybe?
-plot(scaled_data$Date[c(-1,-2)], diff(scaled_data$scaled_bth, 2), type = 'l')
-lines(scaled_data$Date[c(-1,-2)], diff(scaled_data$scaled_eth, 2), type = 'l', col = 'red')
-lines(scaled_data$Date[c(-1,-2)], diff(scaled_data$scaled_doge, 2), type = 'l', col = 'dark green')
-#eh decent I guess
 
-scaled_data <- scaled_data[,-1]
+```{r}
+# creating scaled log dataframe
+# resolving NAs
+# na2lag1(c(closing_prices$BTC,closing_prices$DOGE,closing_prices$ETH))
 
+Date <- closing_prices$Date
+sl_btc <- scale(log((closing_prices$BTC)))[, 1]
+sl_doge <- scale(log(as.numeric(closing_prices$DOGE)))[, 1]
+sl_eth <- scale(log(as.numeric(closing_prices$ETH)))[, 1]
+sl_data <- data.frame(Date, sl_btc, sl_doge, sl_eth)
+
+plot(sl_data$Date, sl_data$sl_btc, type = "l")
+lines(sl_data$Date, sl_data$sl_eth, type = "l", col = "red")
+lines(sl_data$Date, sl_data$sl_doge, type = "l", col = "dark green")
+```
+
+
+```{r}
+# differenced scaled (unlogged) data
+plot(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_bth, 2), type = "l")
+lines(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_eth, 2), type = "l", col = "red")
+lines(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_doge, 2), type = "l", col = "dark green")
+```
+
+
+```{r}
+# prepping data for vars package
+scaled_data <- scaled_data[, -1]
 scaled_data_clean <- na.omit(scaled_data)
-
 og_data_clean <- na.omit(closing_prices)
-og_data_clean <- og_data_clean[,4]
+og_data_clean <- og_data_clean[, 4]
 
 
-fitvar = VAR(scaled_data_clean, p=2, type="both")
+fitvar <- VAR(scaled_data_clean, p = 2, type = "both")
 
 summary(fitvar)
 
@@ -115,24 +147,37 @@ acf(residuals(fitvar))
 
 VAR
 
-VARselect(scaled_data_clean, lag.max=500, type="const")[["selection"]]
+VARselect(scaled_data_clean, lag.max = 100, type = "both")[["selection"]]
 ts_obj <- as.ts(scaled_data_clean)
 
-var12 <- VAR(ts_obj, p=12, type="const")
-serial.test(var12, lags.pt=12, type="PT.asymptotic")
+var12 <- VAR(ts_obj, p = 12, type = "const")
+serial.test(var12, lags.pt = 12, type = "PT.asymptotic")
 
 forecast(var12) %>%
   autoplot() + xlab("Year")
 
 t <- as.data.frame(forecast(var12))
 
-t$`Point Forecast` * attr(t$`Point Forecast`, 'scaled:scale') + attr(t$`Point Forecast`, 'scaled:center')
+t$`Point Forecast` * attr(t$`Point Forecast`, "scaled:scale") + attr(t$`Point Forecast`, "scaled:center")
 
-#granger test for causality
+# granger test for causality
 
 grangertest(BTC ~ DOGE, data = og_data_clean)
 
 grangertest(BTC ~ ETH, data = og_data_clean)
 
-grangertest(DOGE ~ BTC, order = 50,data = og_data_clean)
+grangertest(DOGE ~ BTC, order = 50, data = og_data_clean)
+```
+
+
+```{r}
+na2lag1 <- function(x) {
+  i <- 1
+  while (i <= length(x)) {
+    if (is.na(x[i])) {
+      x[i] <- x[i - 1]
+    }
+    i <- i + 1
+  }
+}
 ```
