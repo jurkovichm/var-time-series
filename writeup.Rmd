@@ -5,6 +5,7 @@ author: "Marko Jurkovich & Matt Zacharski"
 date: "7 June 2021"
 output: pdf_document
 abstract: "This is our abstract, blah blah blah"
+keywords: "keyword1, keyword2" 
 ---
 
 ```{r setup, include=FALSE}
@@ -34,10 +35,12 @@ na2lag1 <- function(x) {
 
 ### Introduction
 
-(matt)
-- Motivated by the goal of predicting a time series via a correlated partner time series, we will investigate Vector Autoregressive models (AKA VAR(p) models). 
+The vector autoregressive model (VAR) is a time series model that is typically used for the analysis of multivariate time series. Consequently, VAR models are particularly useful in fields where several time series may affect one another. For example, a researcher may be interested in exploring the relationship between several foreign exchange rates overtime or the trends of two countries' GDPs. While the fields of economics and finance may be initial fields that come to mind when discussing VAR models, the natural sciences also use VAR models to analysis and forecast things such as rainfall while also considering humidity, temperature, and other factors. 
 
-- Why VAR models exist, what they're better at than AR models. In predictions they don't just include a variable at time t, but take all previous observations into account.
+Like the name suggests, VAR models are an extension of the univariate autoregressive model. Similar to the univariate autoregressive model, each variable's equation includes its own lagged values. However, the VAR model goes a step further and also includes lagged values of other time series in each variable's equation. Including this extra information allows VAR models to often make more accurate predictions than the general AR model, justifying their existence and use. It is worth noting that several related models have been developed over the past few decades. Namely, structural vector autoregressive models, vector error correction models, and structural vector error correction models. While these models are outside the scope of this paper, it is useful to know they attempt to improve the VAR model by accounting for concepts such as cointegration or some type of shock. 
+
+In this paper, we will discuss the form, estimation, diagnostics, and forecasting process of VAR models. To highlight these methods, we have included a brief analysis of three cryptocurrency time series. 
+
 
 ### Model
 
