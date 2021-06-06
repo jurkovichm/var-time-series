@@ -39,7 +39,7 @@ The vector autoregressive model (VAR) is a time series model that is typically u
 
 Like the name suggests, VAR models are an extension of the univariate autoregressive model. Similar to the univariate autoregressive model, each variable's equation includes its own lagged values. However, the VAR model goes a step further and also includes lagged values of other time series in each variable's equation. Including this extra information allows VAR models to often make more accurate predictions than the general AR model, justifying their existence and use. It is worth noting that several related models have been developed over the past few decades. Namely, structural vector autoregressive models, vector error correction models, and structural vector error correction models. While these models are outside the scope of this paper, it is useful to know they attempt to improve the VAR model by accounting for concepts such as cointegration or some type of shock. 
 
-In this paper, we will discuss the form, estimation, diagnostics, and forecasting process of VAR models. To highlight these methods, we have included a brief analysis of three cryptocurrency time series. 
+In this paper, we will discuss the form, estimation, diagnostics, and forecasting process of VAR models. To highlight these methods, we have included a brief analysis of three cryptocurrency time series. Additionally, this paper will only deal with the selection and forecasting of stationary VAR models. 
 
 
 ### Model
@@ -107,8 +107,44 @@ An extremely important consideration before estimating VAR models however, is pa
 
 - asymptotically valid t-tests on individual coefficients may be constructed in the usual way
 
-### Diagnostics
-(matt)
+### Diagnostics and Lag Length Selection
+
+The diagnostic testing for VAR models is similar to the diagnostic testing for AR models except with a few extra tests to consider. **Idk if we want to include information criteria in the diagnostic section or not but it seems like something worth considering**  
+
+However, first we will go over the lag length selection process. The question of how many lag terms to include in a VAR model is an important because it plays a substantial role in the quality of forecasts the model will make. The common approach to select this number is to fit VAR(*p*) models with lag lengths from *p* = 0,...,$$p_{max}$$ and choose the *p* with that minimizes the considered information criteria. Typically, Akaike, Bayesian, Hannan-Quinn, and forecast prediction error information criterion are considered. Model selection criteria for VAR(*p*) models has the form
+
+\begin{equation}
+\begin{aligned}
+
+IC(p) = ln|\tilde \sum(p)| + c_T * \varphi(n,p)
+
+\end{aligned}
+\end{equation}
+
+where $\tilde \sum(p) = T^-1 \sum^{T}_{t=1} \hat \epsilon_t \hat \epsilon^\prime_t$ represents the residual covariance matrix without a degrees of freedom correction, $c_T$ is a sequence indexed by the sample size T, and $\varphi(n,p)$ is a penalty function to penalize large VAR(*p*) models.**neccessary to write out the individual equations for each criteria?? idk**. Each criterion has its benefits and drawbacks. However, these are not the focus on this paper but it is generally best to consider several criteria when determining the optimal lag length selection. 
+
+When determining the quality of the fit of a certain VAR model, it is useful to consider the ACF and PACFs of the residuals. Similar to evaluating an AR model, we are looking for ACF and PACF plots that show no Considering autocorrealtion within the residuals. Unlike with the univariate AR models, we must also consider cross correaltion plots. Considering the ACF plots of the residuals for each set of residuals of all of the variables in a VAR model is important in order to obsere any cross-correlations between variables indicating that your model might not be capturing the relationship between those variables and time sufficiently. 
+
+To test for heteroscedasticity within errors it is common to use an ARCH-LM test. However, this test relies on a complicated regression that is outside the scope of this paper. Similarly, the technical details of the normality test are also outside the scope of this paper but the gist of it is that researchers should use Jarque-Bera normality tests to test for normality of residuals of either each individual equation or the normality of all the equations' residuals using a variance-covariance matrix for the centered residuals.
+
+It is also wise to test for autocorrelation within the residuals of VAR(*p*) models to avoid standard erros being too small or T-statistics that are too large. Do to this within a VAR(*p*) setting we can conduct a Portmanteau test of the form
+
+\begin{equation}
+\begin{aligned}
+
+Q_h = T \sum_{j = 1}^h tr(\hat{C}_j'\hat{C}_0^{-1}\hat{C}_j\hat{C}_0^{-1}) \quad
+
+\end{aligned}
+\end{equation}
+
+where $\hat{C}_i = \frac{1}{T}\sum_{t = i + 1}^T \bf{\hat{u}}_t \bf{\hat{u}}_{t - i}'^\top$ and the test statistics $Q_h$ has an approximate $\chi^2(K^2(h - n^*))$ distribution. $n^*$ refers to the number of non-deterministic terms in the specified VAR(p) model.
+
+
+
+stability test 
+
+granger test for causality? not going to include this because it seems a little outside the scope...
+
 
 ### Forecasting 
 
@@ -127,7 +163,12 @@ Predicting more than one step ahead is done recursively in what can be referred 
 \end{equation}
 
 ### Data Example
+
 (matt)
+
+1. clean code...
+2. somehow highlight the modeling process in this paper? idk ....
+
 
 ### Discussion
 
@@ -332,6 +373,9 @@ forecast(fitvar_p1, h = 365) %>%
 #irf stuff
 
 plot(irf(fitvar_p9))
+
+
+plot(fitvar_p9)
 
 ```
 
