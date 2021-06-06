@@ -174,7 +174,7 @@ seems like there's several areas of analysis when it comes to VAR models -- fore
 
 Pfaff, Bernhard. VAR, SVAR and SVEC Models: Implementation Within R Package vars. Journal of Statistical Software 27(4), 2008. https://cran.r-project.org/web/packages/vars/vignettes/vars.pdf.
 
-	PennState Eberly College of Science. Vector autoregressive models VAR(p) models.
+PennState Eberly College of Science. Vector autoregressive models VAR(p) models.
 https://online.stat.psu.edu/stat510/lesson/11/11.2.
 
 Shumway, Robert H., and David S. Stoffer. Time Series Analysis and Its Applications. Springer Texts in Statistics, Springer International Publishing, 2017, pp. 273–279. https://link.springer.com/content/pdf/10.1007%2F978-3-319-52452-8.pdf.
