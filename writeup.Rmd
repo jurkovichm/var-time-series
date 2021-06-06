@@ -74,9 +74,11 @@ $$
  + \begin{bmatrix}\epsilon_{t,1} \\ \epsilon_{t,2}\\ \vdots \\ \epsilon_{t,3}\end{bmatrix}
 $$
 
-or, abstracting the matrices:
+or, abstracting the matrices
 
-$$\bf{x}_{t} =Au + B^1x_{t-1} +...+B^px_{t-p} +\epsilon_t $$
+$$\bf{x}_{t} =Au + B^1x_{t-1} +...+B^px_{t-p} +\epsilon_t $$ 
+
+where $$\bf{x}_{t}$$ is an (k x 1) vector of time series variables, and $\bf{x}_{t-i}$ are the vectors of the time series variables at various lags determined by *p*. $\bf{A}$ is the coefficient matrix on the constant and trend term (both optional) represented in $\bf{u}$. $\bf B^ix_{t-1}$ are the (k x k) coefficient matrices; there are *p* of these matrices dependent on the order of the VAR(p) model. $\bf \epsilon_t$ is the vector of error terms.
 
 ### Estimation
 
