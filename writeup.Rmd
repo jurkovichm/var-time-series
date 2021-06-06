@@ -40,7 +40,11 @@ na2lag1 <- function(x) {
 
 The basic structure of a VAR model is quite similar to that of an AR model, however there are two fundamental differences. The first is that there are multiple equations, one for each item in the vector of time series considered. Secondly, rather than have a time point $x_t$ of a given time series being regressed on its own lags, it is also regressed on the lags of the other time series. The order of the model (number of lags) is typically indicated by the *p* in VAR(*p*).
 
-There are three main forms of VAR models: reduced form, recursive, and structural. The reduced form defines each variable in the vector of time series as the function of its own lags and the lags of all other variables, with an error term. The error terms from each equation can theoretically be correlated. Recursive VAR models are constructed so that the error terms for a variable are uncorrelated to the prior variables' errors. This is done by adding the  preceding variables' current values to the typical VAR equation. The structural VAR models are distinguished in that they make assumptions of the "causal structure" of the the data allow shocks to be indentified. These shocks would otherwise be incorporated into error terms in recursive and reduced models.
+There are three main forms of VAR models: reduced form, recursive, and structural. The reduced form defines each variable in the vector of time series as the function of its own lags and the lags of all other variables, with an error term. The error terms from each equation can theoretically be correlated, *but only within the same time period*. Correlation across equations across different time periods would imply autocorrelated errors within a single time series, which is not an assumption of the model.
+
+Recursive VAR models are constructed so that the error terms for a variable are uncorrelated to the prior variables' errors. This is done by adding the  preceding variables' current values to the typical VAR equation. 
+
+The structural VAR models are distinguished in that they make assumptions of the "causal structure" of the the data allow shocks to be indentified. These shocks would otherwise be incorporated into error terms in recursive and reduced models.
 
 A reduced VAR(1) model with  three variables can be modeled as such:
 
@@ -48,9 +52,7 @@ $$x_{t,1} = \alpha_1 + \beta_{1,1}x_{t-1,1} +\beta_{1,2}x_{t-1,2} + \beta_{1,3}x
 $$x_{t,2} = \alpha_2 + \beta_{2,1}x_{t-1,1} +\beta_{2,2}x_{t-1,2} + \beta_{2,3}x_{t-1,3}+\epsilon_{t,2}$$
 $$x_{t,1} = \alpha_3 + \beta_{3,1}x_{t-1,1} +\beta_{3,2}x_{t-1,2} + \beta_{3,3}x_{t-1,3}+\epsilon_{t,3}$$
 
-[explain above]
-
-We can generalize the equation for a VAR(*p*) model with *k* variables using matrix algebra:
+We can generalize the previous equations for a VAR(*p*) model with *k* variables using matrix algebra:
 $$
 \begin{bmatrix}x_{1,t} \\ x_{2,t}\\ \vdots \\ x_{k,t}\end{bmatrix} = 
 \begin{bmatrix} \alpha_{1}^1 & \alpha_{1}^2 \\ \alpha_{2} & \alpha_{2}^2\\ \vdots & \vdots  \\ \alpha_{k}^1 & \alpha_k^2\end{bmatrix} \begin{bmatrix} 1 \\ t \end{bmatrix}+
