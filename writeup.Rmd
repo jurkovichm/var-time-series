@@ -1,7 +1,8 @@
 ---
 title: "Vector Autoregressive Models"
+subtitle: "Time Series Final | 'Flavor 2'"
 author: "Marko Jurkovich & Matt Zacharski"
-date: "6/3/2021"
+date: "7 June 2021"
 output: pdf_document
 abstract: "This is our abstract, blah blah blah"
 ---
@@ -52,37 +53,44 @@ The structural VAR models are distinguished in that they make assumptions of the
 
 A reduced VAR(1) model with  three variables can be modeled as such:
 
-$$x_{t,1} = \alpha_1 + \beta_{1,1}x_{t-1,1} +\beta_{1,2}x_{t-1,2} + \beta_{1,3}x_{t-1,3}+\epsilon_{t,1}$$
-$$x_{t,2} = \alpha_2 + \beta_{2,1}x_{t-1,1} +\beta_{2,2}x_{t-1,2} + \beta_{2,3}x_{t-1,3}+\epsilon_{t,2}$$
-$$x_{t,1} = \alpha_3 + \beta_{3,1}x_{t-1,1} +\beta_{3,2}x_{t-1,2} + \beta_{3,3}x_{t-1,3}+\epsilon_{t,3}$$
+\begin{equation}
+\begin{aligned}
+x_{t,1} = \alpha_1 + \beta_{1,1}x_{t-1,1} +\beta_{1,2}x_{t-1,2} + \beta_{1,3}x_{t-1,3}+\epsilon_{t,1} \\
+x_{t,2} = \alpha_2 + \beta_{2,1}x_{t-1,1} +\beta_{2,2}x_{t-1,2} + \beta_{2,3}x_{t-1,3}+\epsilon_{t,2} \\
+x_{t,1} = \alpha_3 + \beta_{3,1}x_{t-1,1} +\beta_{3,2}x_{t-1,2} + \beta_{3,3}x_{t-1,3}+\epsilon_{t,3}
+\end{aligned}
+\end{equation}
 
 We can generalize the previous equations for a VAR(*p*) model with *k* variables using matrix algebra:
-\begin{math}
+
+\begin{equation}
 \begin{bmatrix}x_{1,t} \\ x_{2,t}\\ \vdots \\ x_{k,t}\end{bmatrix} = 
 \begin{bmatrix} \alpha_{1}^1 & \alpha_{1}^2 \\ \alpha_{2} & \alpha_{2}^2\\ \vdots & \vdots  \\ \alpha_{k}^1 & \alpha_k^2\end{bmatrix} \begin{bmatrix} 1 \\ t \end{bmatrix}+
 \begin{bmatrix}
-\beta_{1,1}^1& \beta_{1,2}^1 & \cdots & \beta_{1,k}^1\\
-\beta_{2,1}^1&\beta_{2,2}^1 & \cdots & \beta_{2,k}^1\\
-\vdots& \vdots& \ddots& \vdots\\
-\beta_{k,1}^1&\beta_{k,2}^1 & \cdots & \beta_{k,k}^1
+\beta_{1,1}^1 & \cdots & \beta_{1,k}^1\\
+\beta_{2,1}^1 & \cdots & \beta_{2,k}^1\\
+\vdots& \ddots& \vdots\\
+\beta_{k,1}^1& \cdots & \beta_{k,k}^1
 \end{bmatrix}
 \begin{bmatrix}x_{t-1,1} \\ x_{t-1,2}\\ \vdots \\ x_{t-1,k}\end{bmatrix}
 + \cdots +
 \begin{bmatrix}
-\beta_{1,1}^p&\beta_{1,2}^p & \cdots & \beta_{1,k}^p\\
-\beta_{2,1}^p&\beta_{2,2}^p & \cdots & \beta_{2,k}^p\\
-\vdots& \vdots& \ddots& \vdots\\
-\beta_{k,1}^p&\beta_{k,2}^p & \cdots & \beta_{k,k}^p
+\beta_{1,1}^p & \cdots & \beta_{1,k}^p\\
+\beta_{2,1}^p & \cdots & \beta_{2,k}^p\\
+\vdots& \ddots& \vdots\\
+\beta_{k,1}^p & \cdots & \beta_{k,k}^p
 \end{bmatrix}
 \begin{bmatrix}y_{t-p,1} \\ y_{t-p,2}\\ \vdots \\ y_{t-p,k}\end{bmatrix}
 + \begin{bmatrix}\epsilon_{t,1} \\ \epsilon_{t,2}\\ \vdots \\ \epsilon_{t,3}\end{bmatrix}
-\end{math}
+\end{equation}
 
 or, abstracting the matrices
 
-$$\bf{x}_{t} =Au + B^1x_{t-1} +...+B^px_{t-p} +\epsilon_t $$ 
+\begin{equation}
+\bf{x}_{t} =Au + B^1x_{t-1} +...+B^px_{t-p} +\epsilon_t 
+\end{equation}
 
-where $$\bf{x}_{t}$$ is an (k x 1) vector of time series variables, and $\bf{x}_{t-i}$ are the vectors of the time series variables at various lags determined by *p*. $\bf{A}$ is the coefficient matrix on the constant and trend term (both optional) represented in $\bf{u}$. $\bf B^ix_{t-1}$ are the (k x k) coefficient matrices; there are *p* of these matrices dependent on the order of the VAR(p) model. $\bf \epsilon_t$ is the vector of error terms.
+where $\bf{x}_{t}$ is an (k x 1) vector of time series variables, and $\bf{x}_{t-i}$ are the vectors of the time series variables at various lags determined by *p*. $\bf{A}$ is the coefficient matrix on the constant and trend term (both optional) represented in $\bf{u}$. $\bf B^ix_{t-1}$ are the (k x k) coefficient matrices; there are *p* of these matrices dependent on the order of the VAR(p) model. $\bf \epsilon_t$ is the vector of error terms.
 
 ### Estimation
 
@@ -100,12 +108,17 @@ where $$\bf{x}_{t}$$ is an (k x 1) vector of time series variables, and $\bf{x}_
 
 (marko)
 
-Forecasting in VAR is somewhat straightforward and similar to typical AR models. A 1-step ahead forecast made at time *t+1* can be expressed as:
+Forecasting in VAR is somewhat straightforward and similar to typical AR models. A one-step ahead forecast made at time *t+1* can be expressed as:
 
-$$\bf{x}_{t+1|t} =Au + B^1x_t +...+B^px_{t-p+1} $$
+\begin{equation}
+\bf{x}_{t+1|t} =Au + B^1x_t +...+B^px_{t-p+1}
+\end{equation}
 
+Predicting more than one step ahead is done recursively in what can be referred to as the chain-rule of forecasting:
 
-- recusive h-step ahead
+\begin{equation}
+\bf{x}_{t+1|t} =Au + B^1x_t +...+B^px_{t-p+1}
+\end{equation}
 
 ### Data Example
 (matt)
