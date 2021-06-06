@@ -168,6 +168,8 @@ Predicting more than one step ahead is done recursively in what can be referred 
 
 ### Discussion
 
+seems like there's several areas of analysis when it comes to VAR models -- forecasting then observing the relationship between variables etc 
+
 ### References
 
 Pfaff, Bernhard. VAR, SVAR and SVEC Models: Implementation Within R Package vars. Journal of Statistical Software 27(4), 2008. https://cran.r-project.org/web/packages/vars/vignettes/vars.pdf.
