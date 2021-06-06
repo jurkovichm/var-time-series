@@ -74,6 +74,10 @@ $$
  + \begin{bmatrix}\epsilon_{t,1} \\ \epsilon_{t,2}\\ \vdots \\ \epsilon_{t,3}\end{bmatrix}
 $$
 
+or, abstracting the matrices:
+
+$$\bf{x}_{t} =Au + B^1x_{t-1} +...+B^px_{t-p} +\epsilon_t $$
+
 ### Estimation
 
 (marko)
@@ -89,7 +93,11 @@ $$
 ### Forecasting
 
 (marko)
-- one step ahead
+
+Forecasting in VAR is somewhat straightforward and similar to typical AR models. A 1-step ahead forecast made at time *t+1* can be expressed as:
+
+$$\bf{x}_{t+1|t} =Au + B^1x_t +...+B^px_{t-p+1} $$
+
 
 - recusive h-step ahead
 
