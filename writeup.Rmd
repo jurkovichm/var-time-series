@@ -44,8 +44,6 @@ In this paper, we will discuss the form, estimation, diagnostics, and forecastin
 
 ### Model
 
-(marko)
-
 The basic structure of a VAR model is quite similar to that of an AR model, however there are two fundamental differences. The first is that there are multiple equations, one for each item in the vector of time series considered. Secondly, rather than have a time point $x_t$ of a given time series being regressed on its own lags, it is also regressed on the lags of the other time series. The order of the model (number of lags) is typically indicated by the *p* in VAR(*p*).
 
 There are three main forms of VAR models: reduced form, recursive, and structural. The reduced form defines each variable in the vector of time series as the function of its own lags and the lags of all other variables, with an error term. The error terms from each equation can theoretically be correlated, *but only within the same time period*. Correlation across equations across different time periods would imply autocorrelated errors within a single time series, which is not an assumption of the model.
@@ -97,8 +95,6 @@ where $\bf{x}_{t}$ is an (k x 1) vector of time series variables, and $\bf{x}_{t
 
 ### Estimation
 
-(marko)
-
 VAR models fall into the category of Seemingly Unrealted Regression (SUR) models, which, without diving into too much detail, allows the combination multivariate systems into a conceptially simpler notation. The VAR case of SUR models in one in which all the explanatory variables (but not the coefficients, importantly) are indentical across equations. While SUR models often use Generalized Least Squares to estimate the equations, in the case of VAR models OLS is theoretically just as efficient at estimating each equation individually.
 
 An extremely important consideration before estimating VAR models however, is parameter selection and extent. As both variables and lags are added to VAR models, the number of coefficients increases quadratically. For example, a "nine-variable, four-lag VAR has 333 unknown coefficients" (Stock 110).
@@ -144,8 +140,6 @@ granger test for causality? not going to include this because it seems a little 
 
 ### Forecasting 
 
-(marko)
-
 Forecasting in VAR is somewhat straightforward and similar to typical AR models. A one-step ahead forecast made at time *t+1* can be expressed as:
 
 \begin{equation}
@@ -157,6 +151,8 @@ Predicting more than one step ahead is done recursively in what can be referred 
 \begin{equation}
 \bf{x}_{t+1|t} =Au + B^1x_t +...+B^px_{t-p+1}
 \end{equation}
+
+- what happens to SEs
 
 ### Data Example
 
