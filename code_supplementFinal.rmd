@@ -1,0 +1,407 @@
+---
+title: "Vector Autoregressive Models"
+subtitle: "Time Series Final | 'Flavor 2'"
+author: "Marko Jurkovich & Matt Zacharski"
+date: "7 June 2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(vars)
+library(lmtest)
+library(forecast)
+
+
+# na 'resolver'. turns na's into previous day's close value
+
+na2lag1 <- function(x) {
+  i <- 1
+  while (i <= length(x)) {
+    if (is.na(x[i])) {
+      x[i] <- x[i - 1]
+    }
+    i <- i + 1
+  }
+  return(x)
+}
+```
+
+## Reading In Data
+
+```{r}
+# reading in data
+btc <- read_csv("BTC-USD.csv")
+eth <- read_csv("ETH-USD.csv")
+doge <- read_csv("DOGE-USD.csv")
+eth <- eth[-1827, ] # matching length
+```
+
+## Plotting the Data
+
+```{r}
+# creating closing price dataframe
+closing_prices <- as.data.frame(cbind(btc$Close, eth$Close, doge$Close))
+closing_prices$Date <- btc$Date
+colnames(closing_prices) <- c("BTC", "ETH", "DOGE", "Date")
+
+# plotting the 3 time series
+plot(closing_prices$Date, closing_prices$BTC, type = "l")
+lines(closing_prices$Date, closing_prices$ETH, type = "l", col = "red")
+lines(closing_prices$Date, closing_prices$DOGE, type = "l", col = "dark green")
+```
+
+## Scaling the Data and Plotting it 
+
+```{r}
+# creating scaled data dataframe
+btc_scale <- scale(closing_prices$BTC)
+doge_scale <- scale(closing_prices$DOGE)
+eth_scale <- scale(closing_prices$ETH)
+
+scaled_data <- data.frame(
+  Date = closing_prices$Date,
+  scaled_bth = btc_scale[, 1],
+  scaled_eth = eth_scale[, 1],
+  scaled_doge = doge_scale[, 1]
+)
+
+# plotting the scaled data
+plot(scaled_data$Date, scaled_data$scaled_bth, type = "l")
+lines(scaled_data$Date, scaled_data$scaled_eth, type = "l", col = "red")
+lines(scaled_data$Date, scaled_data$scaled_doge, type = "l", col = "dark green")
+```
+
+## Scaling, Logging, and Plotting the Data
+
+```{r}
+
+# creating scaled log dataframe
+Date <- closing_prices$Date
+sl_btc <- scale(log((closing_prices$BTC)))[, 1]
+sl_doge <- scale(log(as.numeric(closing_prices$DOGE)))[, 1]
+sl_eth <- scale(log(as.numeric(closing_prices$ETH)))[, 1]
+sl_data <- data.frame(Date, sl_btc, sl_doge, sl_eth)
+
+
+# plotting scaled log data
+plot(sl_data$Date, sl_data$sl_btc, type = "l", main = 'Plot of Scaled and Log Data', xlab = 'Year', ylab = 'Loged and Scaled Price')
+lines(sl_data$Date, sl_data$sl_eth, type = "l", col = "red")
+lines(sl_data$Date, sl_data$sl_doge, type = "l", col = "dark green")
+legend('topleft', legend =c("BTC", "ETH", "DOGE"), fill = c("black","red","dark green") )
+```
+
+## Plotting Differenced Scaled Data 
+
+```{r}
+
+# differenced scaled (unlogged) data plot
+plot(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_bth, 2), type = "l")
+lines(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_eth, 2), type = "l", col = "red")
+lines(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_doge, 2), type = "l", col = "dark green")
+```
+
+## Selecting p 
+
+```{r}
+
+# varselect for scaled & logged data, determining optimal lag length
+slvar <- VARselect(na.omit(sl_data[,-1]), lag.max = 100, type = "both")
+slvar$selection
+plot(slvar$criteria[1,], type = 'l')
+lines(slvar$criteria[2,], type = 'l', col = "red")
+```
+
+# granger test for causality 
+
+```{r}
+
+grangertest(sl_btc ~ sl_doge, data = sl_data, order = 1)
+
+grangertest(sl_btc ~ sl_eth, data = sl_data, order = 1)
+
+grangertest(sl_doge ~ sl_eth, data = sl_data, order = 1)
+
+grangertest(sl_doge ~ sl_btc, data = sl_data, order = 1)
+
+grangertest(sl_eth ~ sl_btc, data = sl_data, order = 1)
+
+grangertest(sl_eth ~ sl_doge, data = sl_data, order = 1)
+
+```
+
+## Fitting Models
+
+```{r}
+
+# removing NAs 
+sl_data$sl_btc<-na2lag1(sl_data$sl_btc)
+sl_data$sl_doge<-na2lag1(sl_data$sl_doge)
+sl_data$sl_eth<-na2lag1(sl_data$sl_eth)
+
+
+# using results of VARselect to fit two models than compare them
+fitvar_p9 <- VAR(sl_data[,-1], p = 9, type = "both")
+fitvar_p1 <- VAR(sl_data[,-1], p = 1, type = "both")
+
+summary(fitvar_p9)
+summary(fitvar_p1)
+
+```
+
+## Diagnostic Tests
+
+```{r}
+
+# Asymptotic Portmanteau test
+
+# we fail to find evidence of autocorrelation in the residuals of the VAR(9) model at the default of 16 lags,
+serial.test(fitvar_p9, lags.pt = 16)
+
+
+# we find evidence of autocorrelation in the residuals of the VAR(1) model
+serial.test(fitvar_p1, lags.pt = 16)
+
+
+# Breusch-Godfrey test
+
+# same reversal present for the BG test...
+serial.test(fitvar_p9,lags.bg = 16, type = 'BG')
+
+
+serial.test(fitvar_p1,lags.bg = 16, type = 'BG')
+
+```
+
+
+```{r}
+# testing the stability of the model
+stablity_test_p9 <-stability(fitvar_p9, type = c("OLS-CUSUM"))
+stablity_test_p1 <-stability(fitvar_p1, type = c("OLS-CUSUM"))
+
+# the plots look decent
+plot(stablity_test_p9)
+plot(stablity_test_p1)
+
+```
+
+
+
+```{r}
+# Jarque–Bera test is a goodness-of-fit test of whether sample data have the skewness and kurtosis matching a normal distribution
+p9_normal <- normality.test(fitvar_p9)
+p1_normal <- normality.test(fitvar_p1)
+
+plot(p9_normal)
+plot(p1_normal)
+
+
+# Portmanteau Q and test for the null hypothesis that the residuals of an model are homoscedastic
+arch.test(fitvar_p9)
+arch.test(fitvar_p1)
+```
+
+
+## Residual Plots for Each Fit
+
+```{r}
+
+acf(residuals(fitvar_p9))
+
+
+acf(residuals(fitvar_p1))
+
+
+```
+
+## Forecasting
+
+```{r}
+
+# need to refit model using slightly differently formatted data 
+sl_data_as_ts <- as.ts(sl_data[,-1])
+fitvar_p9 <- VAR(sl_data_as_ts, p = 9, type = "both")
+
+forecast(fitvar_p9, h = 12) %>%
+  autoplot() + xlab("Year")
+
+fitvar_p1 <- VAR(sl_data_as_ts, p = 1, type = "both")
+
+forecast(fitvar_p1, h = 12) %>%
+  autoplot() + xlab("Year") 
+
+
+```
+
+## Evaluating Forecast Quality
+
+
+```{r}
+
+# Our data ends on 5-25-2021, so now we will load in the most recent closing prices for all three cryptocurrencies 
+
+new_btc <- read_csv('BTC-USD2.csv')
+new_doge <- read_csv('DOGE-USD2.csv')
+new_eth <- read_csv('ETH-USD2.csv')
+
+
+closing_prices2 <- as.data.frame(cbind(new_btc$Close, new_eth$Close, new_doge$Close))
+closing_prices2$Date <- new_btc$Date
+colnames(closing_prices2) <- c("BTC", "ETH", "DOGE", "Date")
+
+
+# creating scaled log dataframe
+closing_prices_combinded <- rbind(closing_prices, closing_prices2)
+Date2 <- closing_prices_combinded$Date
+sl_btc2 <- scale(log((closing_prices_combinded$BTC)))[, 1]
+sl_doge2 <- scale(log(as.numeric(closing_prices_combinded$DOGE)))[, 1]
+sl_eth2 <- scale(log(as.numeric(closing_prices_combinded$ETH)))[, 1]
+sl_data2 <- data.frame(Date2, sl_btc2, sl_doge2, sl_eth2)
+
+# truncated the old data we used to keep the data on the same scale 
+sl_data2 <- sl_data2[1827:1838,]
+
+
+sl_data_as_ts2 <- as.ts(sl_data2[,-1])
+
+# we need to get the point forecasts of our p9 model 
+p9_data <- forecast(fitvar_p9, h = 12)
+
+p9_data_temp <- as.data.frame(p9_data)
+
+p9_data_temp <- p9_data_temp[,1:3]
+
+
+
+# we need to change the format of our data for easier plotting 
+sl_data_longer <- pivot_longer(sl_data2, cols = sl_btc2:sl_eth2, names_to = 'Series', values_to = 'Value')
+sl_data_longer$Date2 <- rep(1827:1838,times = 1, each = 3)
+
+
+sl_data_longer$Time <- sl_data_longer$Date2
+sl_data_longer$Date2 <- NULL
+
+
+p9_data_temp$Value <- p9_data_temp$`Point Forecast`
+p9_data_temp$`Point Forecast` <- NULL
+
+
+all_data <- rbind(p9_data_temp, sl_data_longer)
+```
+
+```{r}
+all_data %>%
+  filter(Series == 'sl_btc' | Series == 'sl_btc2') %>%
+  ggplot(aes(x = Time, y = Value, group = Series, color = Series)) + 
+  geom_line() + 
+  scale_color_discrete(name  ="Series",
+                          breaks=c("sl_btc", "sl_btc2"),
+                          labels=c("Forecasted Data", "Actual Data")) + labs(title = 'VAR(9) Model predictions for BTC contrasted with Actual Prices')
+
+all_data %>%
+  filter(Series == 'sl_doge' | Series == 'sl_doge2') %>%
+  ggplot(aes(x = Time, y = Value, group = Series, color = Series)) + 
+  geom_line() + 
+  scale_color_discrete(name  ="Series",
+                          breaks=c("sl_doge", "sl_doge2"),
+                          labels=c("Forecasted Data", "Actual Data")) + labs(title = 'VAR(9) Model predictions for DOGE contrasted with Actual Prices')
+
+all_data %>%
+  filter(Series == 'sl_eth' | Series == 'sl_eth2') %>%
+  ggplot(aes(x = Time, y = Value, group = Series, color = Series)) + 
+  geom_line() + 
+  scale_color_discrete(name  ="Series",
+                          breaks=c("sl_eth", "sl_eth2"),
+                          labels=c("Forecasted Data", "Actual Data")) + labs(title = 'VAR(9) Model predictions for ETH contrasted with Actual Prices')
+
+
+```
+
+## Plotting VAR(1) Data and Actual Values 
+
+```{r}
+# we need to get the point forecasts of our p9 model 
+
+p1_data <- forecast(fitvar_p1, h = 12)
+
+
+p1_data_temp <- as.data.frame(p1_data)
+
+p1_data_temp <- p1_data_temp[,1:3]
+
+
+
+# we need to change the format of our data for easier plotting 
+
+
+p1_data_temp$Value <- p1_data_temp$`Point Forecast`
+p1_data_temp$`Point Forecast` <- NULL
+
+
+all_data2 <- rbind(p1_data_temp, sl_data_longer)
+
+```
+
+```{r}
+
+all_data2 %>%
+  filter(Series == 'sl_btc' | Series == 'sl_btc2') %>%
+  ggplot(aes(x = Time, y = Value, group = Series, color = Series)) + 
+  geom_line() + 
+  scale_color_discrete(name  ="Series",
+                          breaks=c("sl_btc", "sl_btc2"),
+                          labels=c("Forecasted Data", "Actual Data")) + labs(title = 'VAR(1) Model predictions for BTC contrasted with Actual Prices')
+
+all_data2 %>%
+  filter(Series == 'sl_doge' | Series == 'sl_doge2') %>%
+  ggplot(aes(x = Time, y = Value, group = Series, color = Series)) + 
+  geom_line() + 
+  scale_color_discrete(name  ="Series",
+                          breaks=c("sl_doge", "sl_doge2"),
+                          labels=c("Forecasted Data", "Actual Data")) + labs(title = 'VAR(1) Model predictions for DOGE contrasted with Actual Prices')
+
+all_data2 %>%
+  filter(Series == 'sl_eth' | Series == 'sl_eth2') %>%
+  ggplot(aes(x = Time, y = Value, group = Series, color = Series)) + 
+  geom_line() + 
+  scale_color_discrete(name  ="Series",
+                          breaks=c("sl_eth", "sl_eth2"),
+                          labels=c("Forecasted Data", "Actual Data")) + labs(title = 'VAR(1) Model predictions for ETH contrasted with Actual Prices')
+
+
+
+
+
+```
+
+
+
+## Calcualting the Percentage Differance of the Forecasts for VAR(9)
+
+```{r}
+
+# just loading in the above data reformatted for easier use
+pct_diff_data <- read_csv('forecast_actual.csv')
+
+
+
+btc_means <- rowMeans(pct_diff_data[,c('forecast_btc', 'sl_btc2')], na.rm=TRUE)
+eth_means <- rowMeans(pct_diff_data[,c('forecast_eth', 'sl_eth2')], na.rm=TRUE)
+doge_means <- rowMeans(pct_diff_data[,c('forecast_doge', 'sl_doge2')], na.rm=TRUE)
+
+
+#percentage differnce for each cryptocurrency, BTC had the lowest % differnece! So kind of looks like BTC was best predicted for the p9 model
+mean((abs(pct_diff_data$forecast_btc - pct_diff_data$sl_btc2) / btc_means) * 100)
+
+mean((abs(pct_diff_data$forecast_eth - pct_diff_data$sl_eth2) / eth_means) * 100)
+
+mean((abs(pct_diff_data$forecast_doge - pct_diff_data$sl_doge2) / doge_means) * 100)
+
+```
+
+
+
+
+
+

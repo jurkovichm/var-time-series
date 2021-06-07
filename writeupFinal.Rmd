@@ -156,16 +156,6 @@ Predicting more than one step ahead is done recursively in what can be referred 
 
 ### Data Example
 
-(matt)
-
-1. clean code...
-2. somehow highlight the modeling process in this paper? idk ....
-
-1 hour on the data example
-
-1 hour on finishing off the diagnostics section....
-
-
 Give a brief introduction of an example dataset and show how the methods
 you’ve discussed can be used in data analysis. (You may use textbook data or a simulation
 here.)
@@ -192,7 +182,7 @@ Additionally, we also collected the most recent closing prices for the cryptocur
 ![Forecast Using VAR(9)](forecastBTC.png){#id .class width=50% height=50%} ![Forecast Using VAR(9)](forecastETH.png){#id .class width=50% height=50%}
 ![Forecast Using VAR(9)](forecastDOGE.png){#id .class width=50% height=50%}
 
-The mean percentage difference between the forecasted data and the actual data for BTC, ETH, and DOGE coin is 2.5%, 2.62%, and 3.93% respectively. Since the data has been scaled and logged to such a degree, intrepretation of the actual forecasts is difficult. However, we are glad to see our model performing somewhat accurately over a very short term. 
+The mean percentage difference between the forecasted data and the actual data for BTC, ETH, and DOGE coin is 2.5%, 2.62%, and 3.93% respectively. Since the data has been scaled and logged to such a degree, interpretation of the actual forecasts is difficult. However, we are glad to see our model performing somewhat accurately over a very short term. 
 
 
 ### Discussion
