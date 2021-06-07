@@ -109,6 +109,7 @@ An extremely important consideration before estimating VAR models however, is pa
 
 ### Diagnostics and Lag Length Selection
 
+
 The diagnostic testing for VAR models is similar to the diagnostic testing for AR models except with a few extra tests to consider. **Idk if we want to include information criteria in the diagnostic section or not but it seems like something worth considering**  
 
 However, first we will go over the lag length selection process. The question of how many lag terms to include in a VAR model is an important because it plays a substantial role in the quality of forecasts the model will make. The common approach to select this number is to fit VAR(*p*) models with lag lengths from *p* = 0,...,$p_{max}$ and choose the *p* with that minimizes the considered information criteria. Typically, Akaike, Bayesian, Hannan-Quinn, and forecast prediction error information criterion are considered. Model selection criteria for VAR(*p*) models has the form
@@ -120,6 +121,9 @@ IC(p)=ln|\tilde \sum(p)|+c_T*\varphi(n,p)
 \end{equation}
 
 where $\tilde \sum(p) = T^-1 \sum^{T}_{t=1} \hat \epsilon_t \hat \epsilon^\prime_t$ represents the residual covariance matrix without a degrees of freedom correction, $c_T$ is a sequence indexed by the sample size T, and $\varphi(n,p)$ is a penalty function to penalize large VAR(*p*) models.*neccessary to write out the individual equations for each criteria?? idk*. Each criterion has its benefits and drawbacks. However, these are not the focus on this paper but it is generally best to consider several criteria when determining the optimal lag length selection. 
+
+It is also beneficial to consider running Granger Causality tests on several or all of the variables that you are considering including in your VAR model. A variable is said to granger-cause another variable if the first variable is found to be a useful predictor of the second variable. Essentially, a variable $x_1$ fails to granger-cause $x_2$ if for all s>0 the MSE of a forecast of $x_{2,t+s}$ based on lags of $x_2$ is the same or less than a forecast of $x_{2,t+s}$ based on lags of $x_2$ and lags of $x_1$. Notably, granger causality does not say anything about true causality, only about forecasting ability. 
+
 
 When determining the quality of the fit of a certain VAR model, it is useful to consider the ACF and PACFs of the residuals. Similar to evaluating an AR model, we are looking for ACF and PACF plots that show no Considering autocorrealtion within the residuals. Unlike with the univariate AR models, we must also consider cross correaltion plots. Considering the ACF plots of the residuals for each set of residuals of all of the variables in a VAR model is important in order to obsere any cross-correlations between variables indicating that your model might not be capturing the relationship between those variables and time sufficiently. 
 
@@ -135,11 +139,7 @@ Q_h = T \sum_{j = 1}^h tr(\hat{C}_j'\hat{C}_0^{-1}\hat{C}_j\hat{C}_0^{-1}) \quad
 
 where $\hat{C}_i = \frac{1}{T}\sum_{t = i + 1}^T \bf{\hat{u}}_t \bf{\hat{u}}_{t - i}'^\top$ and the test statistics $Q_h$ has an approximate $\chi^2(K^2(h - n^*))$ distribution. $n^*$ refers to the number of non-deterministic terms in the specified VAR(p) model.
 
-
-
-stability test 
-
-granger test for causality? not going to include this because it seems a little outside the scope...
+To test for the stability of a VAR model coefficients overtime, it is typical to compute an empirical fluctuation processes of type OLS-CUSUM.
 
 
 ### Forecasting 
@@ -165,6 +165,39 @@ Predicting more than one step ahead is done recursively in what can be referred 
 1. clean code...
 2. somehow highlight the modeling process in this paper? idk ....
 
+1 hour on the data example
+
+1 hour on finishing off the diagnostics section....
+
+
+Give a brief introduction of an example dataset and show how the methods
+you’ve discussed can be used in data analysis. (You may use textbook data or a simulation
+here.)
+
+As mentioned in the introduction, VAR models are commonly used by the field of finance in order to explore the relationships between several time series and to use the extra information provided by multivariate series in forecasting. Consequently, we downloaded three time series of daily closing prices for Doge coin, Bitcoin, and Ethereum for the past 5 years - from 2016-05-26 to 2021-05-25. While cryptocurrnecies never 'close' in the traditional stock exchange sense, closing price typically refers to the price at 11:59PM UTC on any given day. 
+
+![Scaled and Logged Series Plot](scaledloged.png){#id .class width=50% height=50%}
+
+Figure 1 shows a plot of each series after they have been scaled and logged to adjust for differences in scale and non-stationary behavior. Running the *VARselect* command we see that two of the selection criteria, AIC and FPE, suggest a *p* = 9 and the other two criteria, HQ and SC, suggest a *p* = 1. Consequently, we will fit two VAR models with each respective value of *p*. We also run several granger causality tests to see if any of the series appear to be useful in predicting the other at an order of 1. Unfortunately, we find that the only currency pairing that was significantly predictive was BTC of DOGE coin.
+
+![p9 cross correlation](residuals_p9.png){#id .class width=50% height=50%} ![p1 cross correaltion](residuals_p1.png){#id .class width=50% height=50%}
+
+The grid of nine plots to the left is the cross correaltion plot for the fit with *p* = 9 and the grid to the right is fit with *p* = 1. Ideally all these plots would like like white noise. However, we notice that for both models the residuals of ETH and BTC seem to show significant autocorrelation at lag 0 as well as the DOGE and BTC residuals. 
+
+Conducting a Asymptotic Portmanteau test, we find that we fail to find significant evidence of autocorrealtion in the residuals for the p9 model but we do for the p1 model. Additionally, we conducted a stability test for each fit and found all equations across each model to be relatively stable. Lastly, the fits appear to have normally distributed errors but according to a ARCH Engle's test for residual heteroscedasticity it appears both models contain evidance of heteroscedasticitiy in their residuals which is not ideal.
+
+Despite some not ideal diagnostic tests, we decided to use the p9 model to forecast some data due to its lack of autocorrelation found during the Asymptotic Portmanteau test and its slightly better looking stability test plots. 
+
+![Forecast Using VAR(9)](forecast.png){#id .class width=50% height=50%}
+
+
+Additionally, we also collected the most recent closing prices for the cryptocurrencies since we had collected the data on 2021-05-25 and compared the forecasted VAR(9) values to the actual data values for each currency. 
+
+![Forecast Using VAR(9)](forecastBTC.png){#id .class width=50% height=50%} ![Forecast Using VAR(9)](forecastETH.png){#id .class width=50% height=50%}
+![Forecast Using VAR(9)](forecastDOGE.png){#id .class width=50% height=50%}
+
+The mean percentage difference between the forecasted data and the actual data for BTC, ETH, and DOGE coin is 2.5%, 2.62%, and 3.93% respectively. Since the data has been scaled and logged to such a degree, intrepretation of the actual forecasts is difficult. However, we are glad to see our model performing somewhat accurately over a very short term. 
+
 
 ### Discussion
 
@@ -180,201 +213,3 @@ https://online.stat.psu.edu/stat510/lesson/11/11.2.
 Shumway, Robert H., and David S. Stoffer. Time Series Analysis and Its Applications. Springer Texts in Statistics, Springer International Publishing, 2017, pp. 273–279. https://link.springer.com/content/pdf/10.1007%2F978-3-319-52452-8.pdf.
 
 Stock, James H., and Mark W. Watson. “Vector Autoregressions.” Journal of Economic Perspectives, vol. 15, no. 4, American Economic Association, Nov. 2001, pp. 101–15. Crossref, doi:10.1257/jep.15.4.101.
-
-### Code Appendix
-
-```{r}
-# reading in data
-
-btc <- read_csv("BTC-USD.csv")
-eth <- read_csv("ETH-USD.csv")
-doge <- read_csv("DOGE-USD.csv")
-eth <- eth[-1827, ] # matching length
-```
-
-
-```{r}
-# creating closing price dataframe
-
-closing_prices <- as.data.frame(cbind(btc$Close, eth$Close, doge$Close))
-
-closing_prices$Date <- btc$Date
-
-colnames(closing_prices) <- c("BTC", "ETH", "DOGE", "Date")
-
-plot(closing_prices$Date, closing_prices$BTC, type = "l")
-lines(closing_prices$Date, closing_prices$ETH, type = "l", col = "red")
-lines(closing_prices$Date, closing_prices$DOGE, type = "l", col = "dark green")
-```
-
-
-```{r}
-# creating scaled data dataframe
-
-btc_scale <- scale(closing_prices$BTC)
-doge_scale <- scale(closing_prices$DOGE)
-eth_scale <- scale(closing_prices$ETH)
-
-scaled_data <- data.frame(
-  Date = closing_prices$Date,
-  scaled_bth = btc_scale[, 1],
-  scaled_eth = eth_scale[, 1],
-  scaled_doge = doge_scale[, 1]
-)
-
-plot(scaled_data$Date, scaled_data$scaled_bth, type = "l")
-lines(scaled_data$Date, scaled_data$scaled_eth, type = "l", col = "red")
-lines(scaled_data$Date, scaled_data$scaled_doge, type = "l", col = "dark green")
-```
-
-
-```{r}
-# creating scaled log dataframe
-# resolving NAs
-# na2lag1(c(closing_prices$BTC,closing_prices$DOGE,closing_prices$ETH))
-
-Date <- closing_prices$Date
-sl_btc <- scale(log((closing_prices$BTC)))[, 1]
-sl_doge <- scale(log(as.numeric(closing_prices$DOGE)))[, 1]
-sl_eth <- scale(log(as.numeric(closing_prices$ETH)))[, 1]
-sl_data <- data.frame(Date, sl_btc, sl_doge, sl_eth)
-
-plot(sl_data$Date, sl_data$sl_btc, type = "l")
-lines(sl_data$Date, sl_data$sl_eth, type = "l", col = "red")
-lines(sl_data$Date, sl_data$sl_doge, type = "l", col = "dark green")
-```
-
-
-```{r}
-# differenced scaled (unlogged) data plot
-plot(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_bth, 2), type = "l")
-lines(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_eth, 2), type = "l", col = "red")
-lines(scaled_data$Date[c(-1, -2)], diff(scaled_data$scaled_doge, 2), type = "l", col = "dark green")
-```
-
-```{r}
-# varselect for scaled & logged data
-
-slvar <- VARselect(na.omit(sl_data[,-1]), lag.max = 100, type = "both")
-slvar$selection
-plot(slvar$criteria[1,], type = 'l')
-lines(slvar$criteria[2,], type = 'l', col = "red")
-```
-
-
-
-```{r}
-# prepping data for vars package
-scaled_data_clean <- scaled_data[, -1] %>% na.omit()
-og_data_clean <- na.omit(closing_prices)
-og_data_clean <- og_data_clean[, 4]
-
-# fitting var model
-fitvar <- VAR(scaled_data_clean, p = 2, type = "both")
-
-summary(fitvar)
-acf(residuals(fitvar))
-
-# UNSURE; TO BE LABELED
-ts_obj <- as.ts(scaled_data_clean)
-var12 <- VAR(ts_obj, p = 12, type = "const")
-serial.test(var12, lags.pt = 12, type = "PT.asymptotic")
-
-# forecasts
-
-forecast(var12) %>%
-  autoplot() + xlab("Year")
-
-# should we do an ADF test?? 
-
-# granger test for causality COMMENTED OUT RN
-
-grangertest(sl_btc ~ sl_doge, data = sl_data, order = 2)
-
-#grangertest(BTC ~ ETH, data = og_data_clean)
-
-  #grangertest(DOGE ~ BTC, order = 50, data = og_data_clean)
-```
-
-
-```{r}
-
-# removing NAs 
-sl_data$sl_btc<-na2lag1(sl_data$sl_btc)
-sl_data$sl_doge<-na2lag1(sl_data$sl_doge)
-sl_data$sl_eth<-na2lag1(sl_data$sl_eth)
-
-
-# using results of VARselect to fit two models than compare them
-fitvar_p9 <- VAR(sl_data[,-1], p = 9, type = "both")
-fitvar_p1 <- VAR(sl_data[,-1], p = 1, type = "both")
-
-summary(fitvar_p9)
-summary(fitvar_p1)
-
-# diagnostic tests 
-
-# Asymptotic Portmanteau test
-
-# we fail to find evidence of autocorrelation in the residuals of the VAR(9) model at the default of 16 lags, but if we do 40 we find significant evidence of autocorrealtion, might be a problem??
-serial.test(fitvar_p9, lags.pt = 50)
-
-# we find evidence of autocorrelation in the residuals of the VAR(1) model
-serial.test(fitvar_p1, lags.pt = 40)
-
-
-# Breusch-Godfrey test
-
-# same reversial present for the BG test...
-serial.test(fitvar_p9,lags.bg = 40, type = 'BG')
-
-
-serial.test(fitvar_p1,lags.bg = 40, type = 'BG')
-
-# more diagnostics 
-stablity_test_p9 <-stability(fitvar_p9, type = c("OLS-CUSUM"))
-stablity_test_p1 <-stability(fitvar_p1, type = c("OLS-CUSUM"))
-
-plot(stablity_test_p9)
-plot(stablity_test_p1)
-
-
-# Jarque–Bera test is a goodness-of-fit test of whether sample data have the skewness and kurtosis matching a normal distribution
-p9_normal <- normality.test(fitvar_p9)
-
-#plot(p9_normal)
-
-
-p1_normal <- normality.test(fitvar_p1)
-
-#plot(p1_normal)
-
-# Portmanteau Q and test for the null hypothesis that the residuals of a ARIMA model are homoscedastic
-arch.test(fitvar_p9)
-arch.test(fitvar_p1)
-
-
-#making some forecasts
-
-#need to refit model using slightly differently formatted data 
-sl_data_as_ts <- as.ts(sl_data[,-1])
-fitvar_p9 <- VAR(sl_data_as_ts, p = 9, type = "both")
-
-#forecast(fitvar_p9, h = 365) %>%
-  #autoplot() + xlab("Year")
-
-fitvar_p1 <- VAR(sl_data_as_ts, p = 1, type = "both")
-
-#forecast(fitvar_p1, h = 365) %>%
- # autoplot() + xlab("Year")
-
-#irf stuff
-
-#plot(irf(fitvar_p9))
-
-
-#plot(fitvar_p9)
-
-```
-
-

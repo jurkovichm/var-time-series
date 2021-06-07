@@ -86,9 +86,10 @@ sl_data <- data.frame(Date, sl_btc, sl_doge, sl_eth)
 
 
 # plotting scaled log data
-plot(sl_data$Date, sl_data$sl_btc, type = "l")
+plot(sl_data$Date, sl_data$sl_btc, type = "l", main = 'Plot of Scaled and Log Data', xlab = 'Year', ylab = 'Loged and Scaled Price')
 lines(sl_data$Date, sl_data$sl_eth, type = "l", col = "red")
 lines(sl_data$Date, sl_data$sl_doge, type = "l", col = "dark green")
+legend('topleft', legend =c("BTC", "ETH", "DOGE"), fill = c("black","red","dark green") )
 ```
 
 ## Plotting Differenced Scaled Data 
@@ -112,10 +113,9 @@ plot(slvar$criteria[1,], type = 'l')
 lines(slvar$criteria[2,], type = 'l', col = "red")
 ```
 
-
+# granger test for causality 
 
 ```{r}
-# granger test for causality 
 
 grangertest(sl_btc ~ sl_doge, data = sl_data, order = 1)
 
@@ -128,7 +128,6 @@ grangertest(sl_doge ~ sl_btc, data = sl_data, order = 1)
 grangertest(sl_eth ~ sl_btc, data = sl_data, order = 1)
 
 grangertest(sl_eth ~ sl_doge, data = sl_data, order = 1)
-
 
 ```
 
@@ -157,22 +156,21 @@ summary(fitvar_p1)
 
 # Asymptotic Portmanteau test
 
-# we fail to find evidence of autocorrelation in the residuals of the VAR(9) model at the default of 16 lags, but if we do 40 we find significant evidence of autocorrealtion, might be a problem??
+# we fail to find evidence of autocorrelation in the residuals of the VAR(9) model at the default of 16 lags,
 serial.test(fitvar_p9, lags.pt = 16)
 
-serial.test(fitvar_p9, lags.pt = 50)
 
 # we find evidence of autocorrelation in the residuals of the VAR(1) model
-serial.test(fitvar_p1, lags.pt = 40)
+serial.test(fitvar_p1, lags.pt = 16)
 
 
 # Breusch-Godfrey test
 
 # same reversal present for the BG test...
-serial.test(fitvar_p9,lags.bg = 40, type = 'BG')
+serial.test(fitvar_p9,lags.bg = 16, type = 'BG')
 
 
-serial.test(fitvar_p1,lags.bg = 40, type = 'BG')
+serial.test(fitvar_p1,lags.bg = 16, type = 'BG')
 
 ```
 
@@ -203,6 +201,9 @@ plot(p1_normal)
 arch.test(fitvar_p9)
 arch.test(fitvar_p1)
 ```
+
+
+## Residual Plots for Each Fit
 
 ```{r}
 
