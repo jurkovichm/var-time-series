@@ -4,8 +4,8 @@ subtitle: "Time Series Final | 'Flavor 2'"
 author: "Marko Jurkovich & Matt Zacharski"
 date: "7 June 2021"
 output: pdf_document
-abstract: "This is our abstract, blah blah blah"
-keywords: "keyword1, keyword2" 
+abstract: "Vector Autoregresive Models or VAR models, are an extension of AR models used to analyzed multivariate time series. Each variable is a linear combination of its own lags combined with the lags of other variables. We show how VAR models can be used to analyze several cryptocurrency and cover several common methods associated with estimating and forecasting multiple time series. We find that a tri-variate VAR(9) can potentially be used to adequately predict crypto-currency data over very short time periods."
+keywords: "VAR, time series, Granger-causality test, cryptocurrency, bitcoin" 
 ---
 
 ```{r setup, include=FALSE}
@@ -188,6 +188,12 @@ The mean percentage difference between the forecasted data and the actual data f
 ### Discussion
 
 seems like there's several areas of analysis when it comes to VAR models -- forecasting then observing the relationship between variables etc 
+
+- other types of models (VAR is basic, and we use a basic version of it.)
+
+- granger causality isnt very supportive of the use of the VAR except in the case of BTC -> DOGE. Which makes sense. Variable are cointegrated which may mean time series w common causal effect need addition consideration or seperate models.
+
+- importance of assumptions
 
 ### References
 
