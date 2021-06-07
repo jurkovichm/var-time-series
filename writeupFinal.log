@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.31)  7 JUN 2021 13:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.31)  7 JUN 2021 13:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -380,24 +380,24 @@ LaTeX Warning: Label `id' multiply defined.
 )
 \openout1 = `writeupFinal.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 78.
-LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 79.
+LaTeX Font Info:    ... okay on input line 79.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 79.
+LaTeX Font Info:    ... okay on input line 79.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 79.
+LaTeX Font Info:    ... okay on input line 79.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 79.
+LaTeX Font Info:    ... okay on input line 79.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 79.
+LaTeX Font Info:    ... okay on input line 79.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 79.
+LaTeX Font Info:    ... okay on input line 79.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 79.
+LaTeX Font Info:    ... okay on input line 79.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 79.
+LaTeX Font Info:    ... okay on input line 79.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 79.
+LaTeX Font Info:    ... okay on input line 79.
 
 (/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstop
 df-base.sty
@@ -410,7 +410,7 @@ f-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 78.
+Package hyperref Info: Link coloring OFF on input line 79.
 
 (/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.st
 y
@@ -426,9 +426,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count280
 )
-LaTeX Info: Redefining \ref on input line 78.
-LaTeX Info: Redefining \pageref on input line 78.
-LaTeX Info: Redefining \nameref on input line 78.
+LaTeX Info: Redefining \ref on input line 79.
+LaTeX Info: Redefining \pageref on input line 79.
+LaTeX Info: Redefining \nameref on input line 79.
 (./writeupFinal.out) (./writeupFinal.out)
 \@outlinefile=\write3
 \openout3 = `writeupFinal.out'.
@@ -468,37 +468,37 @@ LaTeX Info: Redefining \nameref on input line 78.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 8
-0.
+1.
 (/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 8
-0.
+1.
 (/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-80.
+81.
 (/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-80.
+81.
 (/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 80.
+(Font)              <12> on input line 81.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 80.
+(Font)              <8> on input line 81.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 80.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 80.
+(Font)              <6> on input line 81.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 81.
 
 (/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 80.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 81.
 
 (/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -507,34 +507,34 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 {/Users/markojurkovich/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex
 .map}]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 133.
+(Font)              <10> on input line 134.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 133.
+(Font)              <7> on input line 134.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 133.
+(Font)              <5> on input line 134.
 [2]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2
-25.
+26.
 (/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [3] [4]
 <scaledloged.png, id=83, 510.40688pt x 405.01312pt>
 File: scaledloged.png Graphic file (type png)
 <use scaledloged.png>
-Package pdftex.def Info: scaledloged.png  used on input line 364.
+Package pdftex.def Info: scaledloged.png  used on input line 365.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
 <residuals_p9.png, id=84, 510.40688pt x 405.01312pt>
 File: residuals_p9.png Graphic file (type png)
 <use residuals_p9.png>
-Package pdftex.def Info: residuals_p9.png  used on input line 378.
+Package pdftex.def Info: residuals_p9.png  used on input line 379.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
 <residuals_p1.png, id=85, 510.40688pt x 405.01312pt>
 File: residuals_p1.png Graphic file (type png)
 <use residuals_p1.png>
-Package pdftex.def Info: residuals_p1.png  used on input line 379.
+Package pdftex.def Info: residuals_p1.png  used on input line 380.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
 
-Overfull \hbox (2.23413pt too wide) in paragraph at lines 378--380
+Overfull \hbox (2.23413pt too wide) in paragraph at lines 379--381
 [][] [] 
  []
 
@@ -543,30 +543,30 @@ Overfull \hbox (2.23413pt too wide) in paragraph at lines 378--380
  duplicate ignored
 <to be read again> 
                    \relax 
-l.407 }
+l.408 }
        
 <forecast.png, id=95, 510.40688pt x 405.01312pt>
 File: forecast.png Graphic file (type png)
 <use forecast.png>
-Package pdftex.def Info: forecast.png  used on input line 407.
+Package pdftex.def Info: forecast.png  used on input line 408.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
 <forecastBTC.png, id=96, 510.40688pt x 405.01312pt>
 File: forecastBTC.png Graphic file (type png)
 <use forecastBTC.png>
-Package pdftex.def Info: forecastBTC.png  used on input line 415.
+Package pdftex.def Info: forecastBTC.png  used on input line 416.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
 <forecastETH.png, id=97, 510.40688pt x 405.01312pt>
 File: forecastETH.png Graphic file (type png)
 <use forecastETH.png>
-Package pdftex.def Info: forecastETH.png  used on input line 416.
+Package pdftex.def Info: forecastETH.png  used on input line 417.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
 <forecastDOGE.png, id=98, 510.40688pt x 405.01312pt>
 File: forecastDOGE.png Graphic file (type png)
 <use forecastDOGE.png>
-Package pdftex.def Info: forecastDOGE.png  used on input line 417.
+Package pdftex.def Info: forecastDOGE.png  used on input line 418.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
 
-Overfull \hbox (2.23413pt too wide) in paragraph at lines 415--418
+Overfull \hbox (2.23413pt too wide) in paragraph at lines 416--419
 [][] []
  []
 
@@ -581,7 +581,7 @@ Package rerunfilecheck Info: File `writeupFinal.out' has not changed.
 Here is how much of TeX's memory you used:
  10294 strings out of 480962
  149580 string characters out of 5906083
- 470829 words of memory out of 5000000
+ 471079 words of memory out of 5000000
  27303 multiletter control sequences out of 15000+600000
  459162 words of font info for 69 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -607,7 +607,7 @@ inyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb></Users/markojurkovich/Library
 /TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/markojurkovich/Lib
 rary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/markojurkovich
 /Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
-Output written on writeupFinal.pdf (7 pages, 318338 bytes).
+Output written on writeupFinal.pdf (7 pages, 318927 bytes).
 PDF statistics:
  185 PDF objects out of 1000 (max. 8388607)
  146 compressed objects within 2 object streams

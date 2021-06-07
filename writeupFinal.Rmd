@@ -4,7 +4,7 @@ subtitle: "Time Series Final | 'Flavor 2'"
 author: "Marko Jurkovich & Matt Zacharski"
 date: "7 June 2021"
 output: pdf_document
-abstract: "Vector Autoregresive Models or VAR models, are an extension of AR models used to analyzed multivariate time series. Each variable is a linear combination of its own lags combined with the lags of other variables. We show how VAR models can be used to analyze several cryptocurrency and cover several common methods associated with estimating and forecasting multiple time series. We find that a tri-variate VAR(9) can potentially be used to adequately predict crypto-currency data over very short time periods."
+abstract: "Vector Autoregresive Models, or VAR models, are an extension of AR models used to analyzed multivariate time series. Each variable is a linear combination of its own lags combined with the lags of other variables. We show how VAR models can be used to analyze several cryptocurrency and cover several common methods associated with estimating and forecasting multiple time series. We find that a tri-variate VAR(9) can potentially be used to adequately predict crypto-currency data over very short time periods."
 keywords: "VAR, time series, Granger-causality test, cryptocurrency, bitcoin" 
 ---
 
@@ -29,7 +29,6 @@ na2lag1 <- function(x) {
   return(x)
 }
 ```
-
 
 \newpage
 
@@ -99,9 +98,7 @@ VAR models fall into the category of Seemingly Unrealted Regression (SUR) models
 
 An extremely important consideration before estimating VAR models however, is parameter selection and extent. As both variables and lags are added to VAR models, the number of coefficients increases quadratically. For example, a "nine-variable, four-lag VAR has 333 unknown coefficients" (Stock 110).
 
-- interpretation of coeffs
-
-- asymptotically valid t-tests on individual coefficients may be constructed in the usual way
+The coefficients of an estimated VAR model can be interpreted similar to that of an OLS or AR model. If all assumptions are met, asymptotically valid t-tests for significance on individual coefficients may be constructed in the usual way.
 
 ### Diagnostics and Lag Length Selection
 
