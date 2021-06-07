@@ -80,7 +80,7 @@ We can generalize the previous equations for a VAR(*p*) model with *k* variables
 \vdots& \ddots& \vdots\\
 \beta_{k,1}^p & \cdots & \beta_{k,k}^p
 \end{bmatrix}
-\begin{bmatrix}y_{t-p,1} \\ y_{t-p,2}\\ \vdots \\ y_{t-p,k}\end{bmatrix}
+\begin{bmatrix}x_{t-p,1} \\ x_{t-p,2}\\ \vdots \\ x_{t-p,k}\end{bmatrix}
 + \begin{bmatrix}\epsilon_{t,1} \\ \epsilon_{t,2}\\ \vdots \\ \epsilon_{t,3}\end{bmatrix}
 \end{equation}
 
@@ -98,7 +98,7 @@ VAR models fall into the category of Seemingly Unrealted Regression (SUR) models
 
 An extremely important consideration before estimating VAR models however, is parameter selection and extent. As both variables and lags are added to VAR models, the number of coefficients increases quadratically. For example, a "nine-variable, four-lag VAR has 333 unknown coefficients" (Stock 110).
 
-The coefficients of an estimated VAR model can be interpreted similar to that of an OLS or AR model. If all assumptions are met, asymptotically valid t-tests for significance on individual coefficients may be constructed in the usual way.
+The coefficients of an estimated VAR model can be interpreted similar to that of an OLS or AR model. If all assumptions are met, asymptotically valid t-tests for significance on individual coefficients may also be constructed in the usual way. Inference on the coefficients is likewise straightforward, where coefficient $\beta_{z,n}^y$ would represent the effect of the lag-y variable of the $n^{th}$ variable on the $z^{th}$ variable at time *t*.
 
 ### Diagnostics and Lag Length Selection
 
@@ -143,13 +143,13 @@ Forecasting in VAR is somewhat straightforward and similar to typical AR models.
 \bf{x}_{t+1|t} =Au + B^1x_t +...+B^px_{t-p+1}
 \end{equation}
 
-Predicting more than one step ahead is done recursively in what can be referred to as the chain-rule of forecasting:
+Predicting more than one step ahead is done recursively in what can be referred to as the chain-rule of forecasting. Essentially, the *t+1* forecast value is used to predict the *t+2* value and so on. The *h*-step ahead forecast can be express as
 
 \begin{equation}
-\bf{x}_{t+1|t} =Au + B^1x_t +...+B^px_{t-p+1}
+\bf{x}_{t+h|t} =Au + B^1x_{t+h-1} +...+B^px_{t+h-p}
 \end{equation}
 
-- what happens to SEs
+As in AR models, the standard errors accumulate over time, increasing the forecast interval without bound as *h* increases.
 
 ### Data Example
 
@@ -186,9 +186,9 @@ The mean percentage difference between the forecasted data and the actual data f
 
 seems like there's several areas of analysis when it comes to VAR models -- forecasting then observing the relationship between variables etc 
 
-- other types of models (VAR is basic, and we use a basic version of it.)
+- other types of models (VAR is basic, and we use a basic version of it.) ARCH and GARCH
 
-- granger causality isnt very supportive of the use of the VAR except in the case of BTC -> DOGE. Which makes sense. Variable are cointegrated which may mean time series w common causal effect need addition consideration or seperate models.
+- granger causality isnt very supportive of the use of the VAR except in the case of BTC -> DOGE. Which makes sense. Variable are cointegrated which may mean time series w common causal effect need addition consideration or seperate models.  
 
 - importance of assumptions
 

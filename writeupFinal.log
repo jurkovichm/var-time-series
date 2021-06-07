@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.31)  7 JUN 2021 13:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.3.31)  7 JUN 2021 13:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -512,29 +512,24 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 134.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 134.
-[2]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 2
-26.
-(/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [3] [4]
-<scaledloged.png, id=83, 510.40688pt x 405.01312pt>
+[2] [3] [4]
+<scaledloged.png, id=82, 510.40688pt x 405.01312pt>
 File: scaledloged.png Graphic file (type png)
 <use scaledloged.png>
-Package pdftex.def Info: scaledloged.png  used on input line 365.
+Package pdftex.def Info: scaledloged.png  used on input line 361.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
-<residuals_p9.png, id=84, 510.40688pt x 405.01312pt>
+<residuals_p9.png, id=83, 510.40688pt x 405.01312pt>
 File: residuals_p9.png Graphic file (type png)
 <use residuals_p9.png>
-Package pdftex.def Info: residuals_p9.png  used on input line 379.
+Package pdftex.def Info: residuals_p9.png  used on input line 375.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
-<residuals_p1.png, id=85, 510.40688pt x 405.01312pt>
+<residuals_p1.png, id=84, 510.40688pt x 405.01312pt>
 File: residuals_p1.png Graphic file (type png)
 <use residuals_p1.png>
-Package pdftex.def Info: residuals_p1.png  used on input line 380.
+Package pdftex.def Info: residuals_p1.png  used on input line 376.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
 
-Overfull \hbox (2.23413pt too wide) in paragraph at lines 379--381
+Overfull \hbox (2.23413pt too wide) in paragraph at lines 375--377
 [][] [] 
  []
 
@@ -543,35 +538,39 @@ Overfull \hbox (2.23413pt too wide) in paragraph at lines 379--381
  duplicate ignored
 <to be read again> 
                    \relax 
-l.408 }
+l.404 }
        
-<forecast.png, id=95, 510.40688pt x 405.01312pt>
+<forecast.png, id=94, 510.40688pt x 405.01312pt>
 File: forecast.png Graphic file (type png)
 <use forecast.png>
-Package pdftex.def Info: forecast.png  used on input line 408.
+Package pdftex.def Info: forecast.png  used on input line 404.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
-<forecastBTC.png, id=96, 510.40688pt x 405.01312pt>
+<forecastBTC.png, id=95, 510.40688pt x 405.01312pt>
 File: forecastBTC.png Graphic file (type png)
 <use forecastBTC.png>
-Package pdftex.def Info: forecastBTC.png  used on input line 416.
+Package pdftex.def Info: forecastBTC.png  used on input line 412.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
-<forecastETH.png, id=97, 510.40688pt x 405.01312pt>
+<forecastETH.png, id=96, 510.40688pt x 405.01312pt>
 File: forecastETH.png Graphic file (type png)
 <use forecastETH.png>
-Package pdftex.def Info: forecastETH.png  used on input line 417.
+Package pdftex.def Info: forecastETH.png  used on input line 413.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
-<forecastDOGE.png, id=98, 510.40688pt x 405.01312pt>
+<forecastDOGE.png, id=97, 510.40688pt x 405.01312pt>
 File: forecastDOGE.png Graphic file (type png)
 <use forecastDOGE.png>
-Package pdftex.def Info: forecastDOGE.png  used on input line 418.
+Package pdftex.def Info: forecastDOGE.png  used on input line 414.
 (pdftex.def)             Requested size: 234.88347pt x 186.38245pt.
 
-Overfull \hbox (2.23413pt too wide) in paragraph at lines 416--419
+Overfull \hbox (2.23413pt too wide) in paragraph at lines 412--415
 [][] []
  []
 
-[6 <./forecast.png> <./forecastBTC.png> <./forecastETH.png>] [7 <./forecastDOGE
-.png>] (./writeupFinal.aux)
+[6 <./forecast.png> <./forecastBTC.png> <./forecastETH.png>]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
+31.
+(/Users/markojurkovich/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [7 <./forecastDOGE.png>] (./writeupFinal.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -607,7 +606,7 @@ inyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb></Users/markojurkovich/Library
 /TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/markojurkovich/Lib
 rary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/markojurkovich
 /Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb>
-Output written on writeupFinal.pdf (7 pages, 318927 bytes).
+Output written on writeupFinal.pdf (7 pages, 319737 bytes).
 PDF statistics:
  185 PDF objects out of 1000 (max. 8388607)
  146 compressed objects within 2 object streams
